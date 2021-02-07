@@ -10,6 +10,7 @@ module.exports = function (program, conf) {
     .command('sell [selector]')
     .allowUnknownOption()
     .description('execute a sell order to the exchange')
+    .option('--price <price>', 'sell with this price', Number)
     .option('--pct <pct>', 'sell with this % of currency balance', Number, conf.sell_pct)
     .option('--order_type <type>', 'order type to use (maker/taker)', /^(maker|taker)$/i, conf.order_type)
     .option('--size <size>', 'sell specific size of currency')
@@ -27,6 +28,7 @@ module.exports = function (program, conf) {
           so[k] = cmd[k]
         }
       })
+      s.next_sell_price = cmd.price
       so.debug = cmd.debug
       so.sell_pct = cmd.pct
       so.selector = objectifySelector(selector || conf.selector)
@@ -64,4 +66,3 @@ module.exports = function (program, conf) {
       setInterval(checkOrder, conf.order_poll_time)
     })
 }
-
